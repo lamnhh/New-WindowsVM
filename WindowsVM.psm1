@@ -117,6 +117,9 @@ Vagrant.configure("2") do |config|
   config.vm.network "forwarded_port", guest: 3389, host: 3389, id: 'rdp', auto_correct: true, disabled: true
   config.vm.network "forwarded_port", guest: 22, host: 2222, id: 'ssh', auto_correct: true, disabled: true
   config.vm.provision :shell, :path => "get-ip.ps1", privileged: false
+  config.vm.provider "vmware_desktop" do |v|
+    v.vmx['usb.present'] = true
+  end
 end
 "@ | Out-File -FilePath "Vagrantfile" -Encoding utf8
 
@@ -147,4 +150,4 @@ ansible_winrm_read_timeout_sec=500
     wsl ~/.local/bin/ansible-playbook -i inventory playbook.yml
 }
 
-New-WindowsVM -Hostname TEST7 -Version W11 -EnableUpdate
+Export-ModuleMember -Function New-WindowsVM
